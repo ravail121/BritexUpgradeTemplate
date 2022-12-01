@@ -9,6 +9,7 @@ Route::middleware('isNewCustomer')->group(function() {
         'verify-bussiness' =>  'BussinessController'
     ]);
     Route::get('rvs', 'PlanController@rvs');
+    Route::get('reentry', 'PlanController@reentry');
     Route::get('byos', 'PlanController@byos');
     Route::get('plan-add-to-cart', 'PlanController@addToCart');
 });

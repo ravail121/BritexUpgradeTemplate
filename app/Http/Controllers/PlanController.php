@@ -469,6 +469,34 @@ class PlanController extends Controller
 
     }
 
+    public function reentry(Request $request){
+
+        $checkSession  = $this->cartItem->checkPlanExists();
+        $deviceId      = session('deviceId') ?: null;
+        $deviceName    = session('deviceName') ?: 'Device';
+
+        $sessionCart = session('cart') ?: [];
+
+        if (session('id')) {
+            $customer = $this->requestConnectionForCustomer('customer', 'get');
+            session('cart')['business_verification'] = $customer->toArray();
+        }
+
+        $plans         = session('planData') ?: $this->requestConnection('plans');
+        $dataPlans     = $plans->filter(function($item) {
+            if (($item['id'] === 170)) {
+                return $item;
+            }
+        });
+
+        $this->processCoupons();
+        
+
+        return view('reentry.index', compact('plans', 'dataPlans', 'deviceId', 'deviceName', 'checkSession', 'sessionCart'));
+
+
+    }
+
       /**
      * Add To Cart
      * http://localhost:8000/plan-add-to-cart?plan_id=5&plan_type=1&sim_name=T-MOBILE%20NANO&buy_sim=yes&sim_id=1&sim_required=1
